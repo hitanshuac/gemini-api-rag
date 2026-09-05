@@ -33,21 +33,27 @@ repowise update
 **Current index:** 564 nodes · 498 edges · Health score: 9.7/10 (Healthy)
 
 ## Overview
-This repository serves as a powerful, extensible **Base Agentic Environment** built on the Antigravity framework. It utilizes a strict **Split-Plane Architecture** that separates the human-defined control plane (`.agents/`) from the system-managed data and state plane (`data/`). This ensures deterministic AI execution, zero-hallucination context management, and enterprise-grade reliability.
+This repository serves as a dual-capability environment:
+1. **Gemini API RAG Engine (`gemini_rag.py`)**: A production-grade document intelligence pipeline providing full-context multi-document reasoning via the Google Gemini File API, with local Excel conversion and SQLite-persisted vector RAG.
+2. **Base Agentic Governance Environment**: Built on the Antigravity framework with a strict **Split-Plane Architecture** separating the human-defined control plane (`.agents/`) from the system-managed data and state plane (`data/`).
 
-## Dynamic Skill Integration
-This workspace is designed to be highly composable. **As new skills and agents are developed in separate, isolated projects, they are continuously imported into this base environment.** This aggregation allows the environment to grow exponentially more powerful over time, consolidating isolated intelligence into a single, unified operating system.
+## Gemini RAG Engine (`gemini_rag.py`)
+- **Dual Mode**:
+  - *Full-Context RAG (`upload_docs` / `query`)*: Direct ingestion via Gemini File API with multi-document cross-referencing and source attribution.
+  - *SQLite Vector RAG (`build_index` / `rag_query`)*: Local chunking, embedding via `gemini-embedding-2`, and persistent cosine retrieval in SQLite (`rag_index.db`).
+- **File Preflight & Ingestion**: Local zero-cost inspection and automatic structured tabular extraction for `.xlsx`, `.csv`, `.pdf`, `.md`, and `.txt`.
+- **Quota Resilience**: Adaptive exponential backoff, jitter, and automatic RPM pacing.
 
 ## Installation & Setup (Standalone Execution)
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/hitanshuac/antigravity-agentic-governance-template.git
-cd antigravity-agentic-governance-template
+git clone https://github.com/hitanshuac/gemini-api-rag.git
+cd gemini-api-rag
 
-# 2. Provision Remote Secrets (Autonomous)
-# Before writing code, instruct your AI Agent to secure the CI/CD pipeline:
-# -> "Please run .agents/workflows/setup-secrets.md to provision my GitHub Actions."
+# 2. Configure Environment
+# Copy or create your .env file:
+# GEMINI_API_KEY=your_gemini_api_key_here
 
 # 3. (Optional) Create and activate a virtual environment
 python -m venv .venv
@@ -56,6 +62,7 @@ python -m venv .venv
 
 # 4. Install dependencies
 pip install -r requirements.txt
+pip install google-genai pypdf openpyxl python-dotenv
 ```
 
 

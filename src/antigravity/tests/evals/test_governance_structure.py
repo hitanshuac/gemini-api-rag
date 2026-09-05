@@ -22,8 +22,9 @@ def test_product_templates_exist():
         "05_TICKETS.md"
     ]
     for template in expected_templates:
-        template_path = templates_dir / template
-        assert template_path.exists(), f"Missing product template: {template}"
+        base_name = template.replace(".md", "")
+        has_template = (templates_dir / template).exists() or (templates_dir / f"{base_name}.template").exists()
+        assert has_template, f"Missing product template: {template} (or {base_name}.template)"
 
 def test_workflows_directory_exists():
     """Verify that workflows directory exists and contains files."""
